@@ -30,4 +30,33 @@ fun Float.mirrorValue(a : Int, b : Int) : Float {
     val k : Float = scaleFactor()
     return (1 - k) * a.inverse() + k * b.inverse()
 }
+fun Int.sf() : Float = 1f - 2 * this
+fun Int.rem2() : Int = this % 2
+fun Float.scf(i : Int) : Float = (1f - this) * (i.rem2()) + this * (1f - i.rem2())
 fun Float.updateValue(dir : Float, a : Int, b : Int)  : Float = mirrorValue(a, b) * dir * scGap
+
+fun Canvas.drawBiBox(i : Int, gap : Float, size : Float, sc : Float, paint : Paint) {
+    val sc1 : Float = sc.divideScale(i, boxes)
+    save()
+    translate(gap * i.sf() * sc1, 0f)
+    drawRect(RectF(-size, -size, size, size), paint)
+    restore()
+}
+
+fun Canvas.drawBBNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    paint.color = foreColor
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.strokeCap = Paint.Cap.ROUND
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    save()
+    translate(w / 2, h - gap * (i) + size + gap * sc1)
+    for (j in 0..(boxes - 1)) {
+        drawBiBox(j, gap, size, sc2.scf(i), paint)
+    }
+    restore()
+}
