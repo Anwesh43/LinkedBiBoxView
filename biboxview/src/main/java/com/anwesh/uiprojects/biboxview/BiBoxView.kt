@@ -215,4 +215,13 @@ class BiBoxView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : BiBoxView {
+            val view : BiBoxView = BiBoxView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
