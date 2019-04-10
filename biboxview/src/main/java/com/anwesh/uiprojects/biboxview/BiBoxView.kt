@@ -21,6 +21,7 @@ val strokeFactor : Int = 90
 val sizeFactor : Float = 2.9f
 val foreColor : Int = Color.parseColor("#673AB7")
 val backColor : Int = Color.parseColor("#BDBDBD")
+val delay : Long = 20
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
@@ -54,7 +55,7 @@ fun Canvas.drawBBNode(i : Int, scale : Float, paint : Paint) {
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     save()
-    translate(w / 2, h - gap * (i) + size + gap * sc1)
+    translate(w / 2, h - (gap * (i) - size + gap * sc1))
     for (j in 0..(boxes - 1)) {
         drawBiBox(j, gap, size, sc2.scf(i), paint)
     }
@@ -105,7 +106,7 @@ class BiBoxView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(delay)
                     view.invalidate()
                 } catch(ex : Exception) {
 
