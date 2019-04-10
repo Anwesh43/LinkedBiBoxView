@@ -192,4 +192,26 @@ class BiBoxView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : BiBoxView) {
+
+        private val animator : Animator = Animator(view)
+        private val bibox : BiBox = BiBox(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            bibox.draw(canvas, paint)
+            animator.animate {
+                bibox.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            bibox.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
